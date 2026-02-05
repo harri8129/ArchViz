@@ -1,26 +1,22 @@
 from fastapi import APIRouter, HTTPException
-from app.schemas.design import DesignRequest
-from app.llm.client import call_llm
+from app.schemas.design import BuildGraphRequest, GraphResponse,ExpandNodeRequest, CanonicalGraphResponse
+from app.services.design_service import DesignService
 
 router = APIRouter()
 
-def load_prompt(system_name: str) -> str:
-    with open("app/llm/prompts/system.txt", "r") as f:
-        prompt = f.read()
-    return prompt.replace("{{SYSTEM_NAME}}", system_name)
-
-@router.post("/generate")
-async def generate_design(payload: DesignRequest):
+@router.post("/build-graph", response_model=GraphResponse)
+async def build_graph(payload: BuildGraphRequest):
     try:
-        prompt = load_prompt(payload.system_name)
-        llm_response = await call_llm(prompt)
-
-        content = llm_response["choices"][0]["message"]["content"]
-
-        return {
-            "system": payload.system_name,
-            "raw_output": content
-        }
-
+        return await DesignService.build_graph(payload.system_name)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/expand-node", response_model=CanonicalGraphResponse)
+async def expand_node(payload: ExpandNodeRequest):
+    return await DesignService.expand_node(
+        system=payload.system,
+        node_id=payload.node_id,
+        node_label=payload.node_label,
+        max_depth=payload.max_depth
+    )

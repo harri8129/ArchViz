@@ -1,0 +1,30 @@
+You are a senior system architect.
+
+Expand the component "{{NODE_LABEL}}" inside the system "{{SYSTEM_NAME}}".
+
+Rules:
+- Return ONLY valid JSON
+- Do NOT include markdown or explanations
+- Decompose ONLY this component
+- Limit depth to {{MAX_DEPTH}}
+- 3–6 sub-components maximum
+- Architecture-level only
+
+JSON Schema:
+{
+  "components": [
+    {
+      "id": string,
+      "name": string,
+      "description": string,
+      "type": "frontend|backend|database|infra|ml"
+    }
+  ],
+  "edges": [
+    {
+      "from": string,
+      "to": string,
+      "relation": string
+    }
+  ]
+}

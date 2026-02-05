@@ -8,6 +8,7 @@ Rules:
 - Do NOT include explanations
 - Include 6–10 components
 - Architecture-level only (no code)
+- Always include an "edges" array, even if empty
 - Each component must have:
   id, name, description, type
 
