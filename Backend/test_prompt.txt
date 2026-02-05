@@ -1,0 +1,36 @@
+You are a senior system architect.
+
+Decompose the system "ChatGPT" into a high-level architecture.
+
+Rules:
+- Return ONLY valid JSON
+- Do NOT include markdown
+- Do NOT include explanations
+- Include 6–10 components
+- Architecture-level only (no code)
+- Each component must have:
+  id, name, description, type
+
+Allowed types:
+frontend, backend, database, infra, ml
+
+JSON Schema:
+{
+  "system": string,
+  "components": [
+    {
+      "id": string,
+      "name": string,
+      "description": string,
+      "type": "frontend|backend|database|infra|ml"
+    }
+  ],
+  "edges": [
+    {
+      "from": string,
+      "to": string,
+      "to": string,
+      "relation": string
+    }
+  ]
+}
