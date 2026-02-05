@@ -15,7 +15,6 @@ async def generate_design(payload: DesignRequest):
         prompt = load_prompt(payload.system_name)
         llm_response = await call_llm(prompt)
 
-        # Extract raw JSON string from LLM response
         content = llm_response["choices"][0]["message"]["content"]
 
         return {

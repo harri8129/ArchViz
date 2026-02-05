@@ -1,8 +1,5 @@
 from fastapi import FastAPI
 from app.api.design import router as design_router
-from dotenv import load_dotenv
-
-load_dotenv()
 
 app = FastAPI(title="ArchViz AI")
 

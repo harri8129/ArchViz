@@ -1,6 +1,6 @@
 You are a senior system architect.
 
-Decompose the system "ChatGPT" into a high-level architecture.
+Decompose the system "{{SYSTEM_NAME}}" into a high-level architecture.
 
 Rules:
 - Return ONLY valid JSON
@@ -28,7 +28,6 @@ JSON Schema:
   "edges": [
     {
       "from": string,
-      "to": string,
       "to": string,
       "relation": string
     }
