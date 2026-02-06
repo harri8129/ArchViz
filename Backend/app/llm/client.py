@@ -6,8 +6,7 @@ from app.core.cache import (
     get_cached_response,
     set_cached_response,
 )
-
-
+from app.core.cost_monitor import cost_monitor
 
 GROQ_API_KEY = get_groq_key()
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
@@ -36,13 +35,17 @@ Rules:
 - Use the agreed JSON schema
 """
 
-    # 🔹 1. Check cache FIRST
+    # Check cache FIRST
     cached = get_cached_response(prompt)
     if cached:
         print("⚡ LLM CACHE HIT")
         return cached
 
     print("🔥 LLM CACHE MISS")
+    
+    # Check budget before making expensive call
+    if not cost_monitor.check_budget_limit():
+        raise RuntimeError("Budget limit exceeded. Please contact administrator.")
 
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
@@ -58,17 +61,18 @@ Rules:
         "temperature": 0
     }
 
-    # 🔹 2. Call Groq ONLY on cache miss
+    # Call Groq
     async with httpx.AsyncClient(timeout=60) as client:
         response = await client.post(GROQ_URL, json=payload, headers=headers)
         response.raise_for_status()
 
     content = response.json()["choices"][0]["message"]["content"]
-
     parsed = extract_json(content)
     
-    # 🔒 Only cache VALID, parsed JSON
+    # Record cost
+    cost_monitor.record_call(system_name)
+    
+    # Cache valid response
     set_cached_response(prompt, parsed)
     
     return parsed
-

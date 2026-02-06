@@ -50,3 +50,11 @@ class CanonicalGraphResponse(BaseModel):
     nodes: List[GraphNode]
     edges: List[GraphEdge]
     metadata: GraphMetadata
+
+class GraphDiffResponse(BaseModel):
+    """Response containing only graph changes"""
+    system: str
+    version: int
+    added_nodes: List[GraphNode]
+    added_edges: List[GraphEdge]
+    metadata: GraphMetadata
