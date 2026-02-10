@@ -31,7 +31,8 @@ async def build_graph(
     try:
         result = await DesignService.build_graph(
             payload.system_name, 
-            return_diff=diff
+            return_diff=diff,
+            use_cache=payload.use_cache
         )
         return result
     except Exception as e:

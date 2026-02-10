@@ -4,6 +4,7 @@ from typing import List
 
 class BuildGraphRequest(BaseModel):
     system_name: str
+    use_cache: bool = True
 
 
 class GraphNode(BaseModel):

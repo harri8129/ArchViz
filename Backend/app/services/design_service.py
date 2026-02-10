@@ -9,16 +9,17 @@ from app.services.graph_diff import GraphDiff
 class DesignService:
 
     @staticmethod
-    async def build_graph(system_name: str, return_diff: bool = False) -> dict:
+    async def build_graph(system_name: str, return_diff: bool = False, use_cache: bool = True) -> dict:
         """
         Build initial graph with optional diff mode.
         
         Args:
             system_name: Name of system to design
             return_diff: If True, return only changes from previous version
+            use_cache: If False, bypass LLM cache
         """
         try:
-            system_design = await call_llm(system_name)
+            system_design = await call_llm(system_name, use_cache=use_cache)
         except Exception:
             raise RuntimeError("LLM failed to generate architecture")
 

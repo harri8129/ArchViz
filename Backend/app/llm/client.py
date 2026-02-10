@@ -25,23 +25,44 @@ def extract_json(text: str) -> dict:
     return json.loads(match.group())
 
 
-async def call_llm(system_name: str) -> dict:
+async def call_llm(system_name: str, use_cache: bool = True) -> dict:
     prompt = f"""
 Decompose the system "{system_name}" into a high-level architecture.
 
+Required JSON Schema:
+{{
+  "system": "{system_name}",
+  "components": [
+    {{
+      "name": "Component name",
+      "type": "frontend|backend|database|cache|gateway|queue|worker|storage",
+      "description": "Short description"
+    }}
+  ],
+  "edges": [
+    {{
+      "from": "Source component name",
+      "to": "Target component name",
+      "relation": "depends_on|calls|writes_to|reads_from"
+    }}
+  ]
+}}
+
 Rules:
-- 6–10 components
+- 7–12 components
 - Architecture-level only
-- Use the agreed JSON schema
+- Ensure all major connections are included in 'edges'
+- Return ONLY the JSON object
 """
 
     # Check cache FIRST
-    cached = get_cached_response(prompt)
-    if cached:
-        print("⚡ LLM CACHE HIT")
-        return cached
+    if use_cache:
+        cached = get_cached_response(prompt)
+        if cached:
+            print("⚡ LLM CACHE HIT")
+            return cached
 
-    print("🔥 LLM CACHE MISS")
+    print("🔥 LLM CACHE MISS (or bypassed)")
     
     # Check budget before making expensive call
     if not cost_monitor.check_budget_limit():
