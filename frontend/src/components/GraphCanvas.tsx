@@ -1,5 +1,6 @@
 import { useGraphStore } from '../store/graphStore';
 import D3Graph from './D3Graph';
+import NodeDetails from './NodeDetails';
 
 export default function GraphCanvas() {
   const isLoading = useGraphStore((state) => state.isLoading);
@@ -8,6 +9,7 @@ export default function GraphCanvas() {
   const nodes = useGraphStore((state) => state.nodes);
   const edges = useGraphStore((state) => state.edges);
   const system = useGraphStore((state) => state.system);
+  const selectedNodeId = useGraphStore((state) => state.selectedNodeId);
 
   return (
     <div className="w-full h-full relative overflow-hidden bg-slate-950">
@@ -65,6 +67,30 @@ export default function GraphCanvas() {
                 System: {system}
               </span>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Node Details Modal - Right Side */}
+      {selectedNodeId && (
+        <div className="absolute top-6 right-6 w-80 z-[100]">
+          <div className="bg-slate-900/95 backdrop-blur-xl border border-indigo-500/30 rounded-2xl shadow-2xl shadow-indigo-500/10 overflow-hidden">
+            {/* Modal Header */}
+            <div className="bg-indigo-600/20 border-b border-indigo-500/20 px-4 py-3 flex items-center justify-between">
+              <h3 className="text-sm font-bold text-indigo-300 uppercase tracking-wider">Node Details</h3>
+              <button
+                onClick={() => useGraphStore.getState().selectNode(null)}
+                className="text-slate-400 hover:text-white transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            {/* Modal Content */}
+            <div className="p-4">
+              <NodeDetails />
+            </div>
           </div>
         </div>
       )}

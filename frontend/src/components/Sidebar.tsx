@@ -9,14 +9,14 @@ import { Info } from 'lucide-react';
 
 const Sidebar: React.FC = () => {
     return (
-        <aside className="w-80 h-screen bg-slate-900 border-r border-slate-800 flex flex-col shadow-2xl z-20 overflow-hidden">
+        <aside className="w-96 h-screen bg-slate-900 border-r border-slate-800 flex flex-col shadow-2xl z-20 overflow-hidden">
             {/* Header */}
-            <div className="p-6 border-b border-slate-800 bg-slate-900/50">
+            <div className="p-8 border-b border-slate-800 bg-slate-900/50">
                 <SystemInput />
             </div>
 
             {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
+            <div className="flex-1 overflow-y-auto p-8 space-y-10 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
                 <NodeDetails />
                 <SearchField />
                 <FilterSection />

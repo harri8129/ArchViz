@@ -97,11 +97,11 @@ export default function SystemInput() {
               value={systemName}
               onChange={(e) => setSystemName(e.target.value)}
               placeholder="e.g., E-commerce App"
-              className="w-full bg-slate-950/80 border border-slate-700/50 focus:border-indigo-500 rounded-xl py-3 px-4 text-sm text-slate-200 placeholder-slate-600 outline-none transition-all focus:ring-2 focus:ring-indigo-500/20"
+              className="w-90 h-10 bg-slate-950/80 border border-slate-700/50 focus:border-indigo-500 rounded-xl py-3 px-4 text-sm text-slate-200 placeholder-slate-600 outline-none transition-all focus:ring-2 focus:ring-indigo-500/20"
               disabled={isLoading}
             />
           </div>
-        </div>
+        </div>  
 
         {error && (
           <div className="flex items-start gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-xl animate-in fade-in slide-in-from-top-1">

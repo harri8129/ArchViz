@@ -63,6 +63,7 @@ interface GraphState {
   setError: (error: string | null) => void;
   reset: () => void;
   pinNode: (nodeId: string, x: number | null, y: number | null) => void;
+  rebuildLayout: () => void;
 }
 
 const DEFAULT_FILTERS: GraphState['filters'] = {
@@ -183,6 +184,20 @@ export const useGraphStore = create<GraphState>()(
           nodes: state.nodes.map(n =>
             n.id === nodeId ? { ...n, fx: x, fy: y } : n
           )
+        }));
+      },
+
+      rebuildLayout: () => {
+        set((state) => ({
+          nodes: state.nodes.map(n => ({
+            ...n,
+            x: undefined,
+            y: undefined,
+            vx: undefined,
+            vy: undefined,
+            fx: null,
+            fy: null,
+          })),
         }));
       },
 

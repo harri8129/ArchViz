@@ -4,7 +4,7 @@ import { useGraphStore } from '../store/graphStore';
 import type { GraphNode, GraphEdge } from '../store/graphStore';
 import { nodeIcons, nodeColors } from './GraphIcons';
 import { renderToString } from 'react-dom/server';
-import { Plus, Layout } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 
 const D3Graph: React.FC = () => {
     const svgRef = useRef<SVGSVGElement>(null);
@@ -19,7 +19,8 @@ const D3Graph: React.FC = () => {
         filters,
         pinNode,
         system,
-        setError
+        setError,
+        rebuildLayout
     } = useGraphStore();
 
     // Filter nodes and edges based on store filters
@@ -71,15 +72,16 @@ const D3Graph: React.FC = () => {
 
         svg.call(zoom);
 
-        // Simulation
+        // Simulation with adjusted forces for better visibility of all edges
         const simulation = d3.forceSimulation<GraphNode>(visibleNodes)
             .force('link', d3.forceLink<GraphNode, GraphEdge>(visibleEdges)
                 .id(d => d.id)
-                .distance(150))
-            .force('charge', d3.forceManyBody().strength(-1000))
+                .distance(200)) // Increased link distance for better spacing
+            .force('charge', d3.forceManyBody().strength(-1500)) // Stronger repulsion to spread nodes
             .force('center', d3.forceCenter(width / 2, height / 2))
-            .force('x', d3.forceX(width / 2).strength(0.1))
-            .force('y', d3.forceY(height / 2).strength(0.1));
+            .force('x', d3.forceX(width / 2).strength(0.05)) // Reduced centering strength for more natural layout
+            .force('y', d3.forceY(height / 2).strength(0.05))
+            .force('collision', d3.forceCollide().radius(40)); // Add collision detection to prevent overlap
 
         // Markers for edge arrows
         svg.append('defs').append('marker')
@@ -263,7 +265,7 @@ const D3Graph: React.FC = () => {
         return () => {
             simulation.stop();
         };
-    }, [visibleNodes, visibleEdges, selectedNodeId, searchTerm, filters, system, selectNode, expandNode, setError, pinNode]);
+    }, [visibleNodes, visibleEdges, selectedNodeId, searchTerm, filters, system, selectNode, expandNode, setError, pinNode, rebuildLayout]);
 
     return (
         <div ref={containerRef} className="w-full h-full bg-slate-900 overflow-hidden relative">
@@ -290,7 +292,7 @@ const D3Graph: React.FC = () => {
 
             {/* Zoom Controls */}
             <div className="absolute bottom-6 right-6 flex flex-col gap-2">
-                <button
+                {/* <button
                     onClick={() => {
                         const svg = d3.select(svgRef.current as any);
                         svg.transition().call(d3.zoom<SVGSVGElement, unknown>().scaleBy as any, 1.3);
@@ -326,6 +328,16 @@ const D3Graph: React.FC = () => {
                     title="Fit View"
                 >
                     <Layout size={20} />
+                </button> */}
+                <button
+                    onClick={() => {
+                        rebuildLayout();
+                    }}
+                    className="w-15 h-10 bg-indigo-600 border border-indigo-500 rounded-lg text-white hover:bg-indigo-500 flex items-center justify-center transition-colors shadow-lg shadow-indigo-500/30"
+                    title="Reset Layout"
+                >
+                    Reset
+                    <RefreshCw size={20} />
                 </button>
             </div>
         </div>
@@ -333,3 +345,4 @@ const D3Graph: React.FC = () => {
 };
 
 export default D3Graph;
+
