@@ -1,4 +1,4 @@
-# 🏗️ ArchViz AI
+# 🏗️ ArchViz 
 
 > **AI-Powered System Architecture Visualizer**
 
