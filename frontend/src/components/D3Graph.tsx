@@ -268,7 +268,7 @@ const D3Graph: React.FC = () => {
     }, [visibleNodes, visibleEdges, selectedNodeId, searchTerm, filters, system, selectNode, expandNode, setError, pinNode, rebuildLayout]);
 
     return (
-        <div ref={containerRef} className="w-full h-full bg-slate-900 overflow-hidden relative">
+        <div id="graph-container" ref={containerRef} className="w-full h-full bg-slate-900 overflow-hidden relative">
             <svg
                 ref={svgRef}
                 className="w-full h-full"

@@ -7,8 +7,12 @@ const ExportTools: React.FC = () => {
     const { system, nodes, edges } = useGraphStore();
 
     const exportAsPng = async () => {
-        const element = document.querySelector('.main-container');
-        if (!element) return;
+        // Target the D3 graph container which holds the SVG visualization
+        const element = document.querySelector('#graph-container svg');
+        if (!element) {
+            console.error('Graph element not found for PNG export');
+            return;
+        }
 
         try {
             const dataUrl = await toPng(element as HTMLElement, {
@@ -25,8 +29,12 @@ const ExportTools: React.FC = () => {
     };
 
     const exportAsSvg = async () => {
-        const element = document.querySelector('.main-container');
-        if (!element) return;
+        // Target the D3 graph container which holds the SVG visualization
+        const element = document.querySelector('#graph-container svg');
+        if (!element) {
+            console.error('Graph element not found for SVG export');
+            return;
+        }
 
         try {
             const dataUrl = await toSvg(element as HTMLElement);
